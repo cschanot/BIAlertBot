@@ -3,5 +3,5 @@ SET PATH=C:\ProgramData\Anaconda3;C:\ProgramData\Anaconda3\Library\mingw-w64\bin
 call conda activate blueiris
 c:
 CD C:\Blueiris\ai
-python detect2.py
+python detect2.py %1
 conda deactivate
