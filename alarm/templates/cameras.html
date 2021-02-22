@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="/static/style.css" type="text/css">
+
+
+
+<form action="/cameras" method="POST">
+<div class="login">
+<div class="login-screen">
+<div class="app-title">
+<h1>Activate Alarms</h1>
+</div>
+<div class="login-form">
+<div class="control-group">
+<label class="login-field-icon fui-user" for="inside-cameras">Set Inside Detection ON or OFF</label>
+<select name="inside" id="inside">
+<option value="ON">ON</option>
+{% if config['camera_alerts']['inside'] == "OFF": %}
+<option value="OFF" selected>OFF</option>
+{% else %}
+<option value="OFF">OFF</option>
+{% endif %}
+</select></div>
+<label class="login-field-icon fui-lock" for="outside-cameras">Set Outside Detection ON or OFF</label>
+<select name="outside" id="outside">
+<option value="ON">ON</option>
+{% if config['camera_alerts']['outside'] == "OFF": %}
+<option value="OFF" selected>OFF</option>
+{% else %}
+<option value="OFF">OFF</option>
+{% endif %}
+</select></div>
+<input type="submit" value="Alarm Set" class="btn btn-primary btn-large btn-block">
+</div>
+</div>
+</form>
