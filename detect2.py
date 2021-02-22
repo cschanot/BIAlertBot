@@ -4,7 +4,12 @@ import sys
 import glob
 import telegram
 from datetime import datetime
+import configparser
 
+config_file = "alerts.ini"
+
+config = configparser.ConfigParser()
+config.read(config_file)
 now = datetime.now()
 date_time = now.strftime("%m%d%Y%H%M%S")
 
@@ -16,6 +21,11 @@ execution_path = "C:\\BlueIris\\ai\\"
 output_path = "E:\\BlueIris\\Alerts\checked\\"
 cam_num = sys.argv[1]
 
+if not os.path.isdir(output_path):
+    os.makedirs(output_path)
+
+if config['camera_alerts']['inside'] == "OFF" and "Cam" in cam_num:
+    sys.exit("Exiting, we aren't monitoring inside cameras")
 LatestFile = max(glob.iglob(alerts_path + cam_num +"*.jpg"),key=os.path.getctime)
 print(LatestFile)
 detector = ObjectDetection()
@@ -30,8 +40,13 @@ for eachObject in detections:
        print("We detected a person with a "+str(round(eachObject["percentage_probability"],2))+"% probability")
        bot = telegram.Bot(token=token)
        photo=open(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile)), 'rb')
+       bot.send_message(chat_id=my_chatID, text="We detected a person with a "+str(round(eachObject["percentage_probability"],2))+"% probability")
        bot.sendPhoto(chat_id=my_chatID, photo=photo)
        break # We dont want multiple messages with the same image
     else:
        print("We did not detect a person")
     print("--------------------------------")
+
+## Clean Up
+if os.path.exists(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile))):
+    os.remove(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile)))
