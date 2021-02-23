@@ -26,6 +26,9 @@ if not os.path.isdir(output_path):
 
 if config['camera_alerts']['inside'] == "OFF" and "Cam" in cam_num:
     sys.exit("Exiting, we aren't monitoring inside cameras")
+if config['camera_alerts']['outside'] == "OFF" and "Out" in cam_num:
+    sys.exit("Exiting, we aren't monitoring outside cameras")
+
 LatestFile = max(glob.iglob(alerts_path + cam_num +"*.jpg"),key=os.path.getctime)
 print(LatestFile)
 detector = ObjectDetection()
@@ -42,11 +45,12 @@ for eachObject in detections:
        photo=open(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile)), 'rb')
        bot.send_message(chat_id=my_chatID, text="We detected a person with a "+str(round(eachObject["percentage_probability"],2))+"% probability")
        bot.sendPhoto(chat_id=my_chatID, photo=photo)
+       photo.close()
        break # We dont want multiple messages with the same image
     else:
        print("We did not detect a person")
     print("--------------------------------")
 
 ## Clean Up
-if os.path.exists(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile))):
-    os.remove(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile)))
+#if os.path.exists(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile))):
+#    os.remove(os.path.join(output_path , date_time+"_"+os.path.basename(LatestFile)))
