@@ -8,3 +8,6 @@ error checking and a proper config file.
 
 Add run_detect.bat as a program that gets run on alert. Before that an
 image must be set to save on Alert for it to check.
+
+Switched over to Pushover instead of Telegram. I was seeing some
+weirdness with lag and messages instantly disappearing on Telegram.
